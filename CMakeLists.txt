@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.12)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml UiTools) 
+
+option(BUILD_DESIGNER_PLUNGIN "Build Qt Designer Plugin" ON)
+option(BUILD_EXAMPLE_APP "Build example app" ON)
+
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml UiTools)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,29 +24,31 @@ set(lib_SOURCES
   )
 
 add_library(PowerSlider SHARED ${lib_SOURCES} )
-
 target_link_libraries(PowerSlider Qt5::UiTools Qt5::Xml Qt5::Widgets )
-
-set(plugin_SOURCES
-  ./src/PowerSlider.cpp 
-  ./src/PowerSliderPlugin.cpp
-  )
-
-
-add_library(PowerSliderPlugin SHARED  ${plugin_SOURCES})
-target_link_libraries(PowerSliderPlugin Qt5::UiTools Qt5::Xml Qt5::Widgets )
-
 
 install(TARGETS PowerSlider DESTINATION lib)
 install(DIRECTORY src/ DESTINATION include/PowerSlider
   FILES_MATCHING PATTERN "*.hpp")
 
-install(TARGETS PowerSliderPlugin DESTINATION plugins/designer)
 
-set(example_SOURCES
-  ./example/main.cpp
-  ./src/PowerSlider.cpp)
+if(BUILD_DESIGNER_PLUNGIN)
+  set(plugin_SOURCES
+    ./src/PowerSlider.cpp 
+    ./src/PowerSliderPlugin.cpp
+    )
+    
+  add_library(PowerSliderPlugin SHARED  ${plugin_SOURCES})
+  target_link_libraries(PowerSliderPlugin Qt5::UiTools Qt5::Xml Qt5::Widgets )
+    
+  install(TARGETS PowerSliderPlugin DESTINATION plugins/designer)
+endif(BUILD_DESIGNER_PLUNGIN)
 
-add_executable(example  ${example_SOURCES})
-target_link_libraries(example Qt5::UiTools Qt5::Xml Qt5::Widgets )
-target_include_directories(example PUBLIC  ${CMAKE_SOURCE_DIR})
+if(BUILD_EXAMPLE_APP)
+  set(example_SOURCES
+    ./example/main.cpp
+    ./src/PowerSlider.cpp)
+  
+  add_executable(example  ${example_SOURCES})
+  target_link_libraries(example Qt5::UiTools Qt5::Xml Qt5::Widgets )
+  target_include_directories(example PUBLIC  ${CMAKE_SOURCE_DIR})
+endif(BUILD_EXAMPLE_APP)

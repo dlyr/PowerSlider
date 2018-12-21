@@ -9,6 +9,9 @@ Manual comming soon.
 
 # compile and install
 Pre install compilation results are copied to `Bundle-*` directory depending on compiler and build type.
+
+designer plugin need Qt5 UiTools package (debian pkg `qttools5-dev`), to skip designer plugin build add `-DBUILD_DESIGNER_PLUGIN=Off` to `cmake` call.
+
 Installation is done under `lib` and `include` directory of `CMAKE_INSTALL_PREFIX`
 
 So a typical build looks like 
