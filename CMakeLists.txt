@@ -37,6 +37,8 @@ install(TARGETS PowerSlider DESTINATION lib)
 install(DIRECTORY src/ DESTINATION include/PowerSlider
   FILES_MATCHING PATTERN "*.hpp")
 
+install(TARGETS PowerSliderPlugin DESTINATION plugins/designer)
+
 set(example_SOURCES
   ./example/main.cpp
   ./src/PowerSlider.cpp)
