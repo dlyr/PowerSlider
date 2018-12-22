@@ -1,4 +1,5 @@
-# PowerSlider
+![alt text][logo]
+# PowerSlider Qt Widget
 ## Presentation
 Qt Widget, a slider and a double spinbox !
 
@@ -33,3 +34,4 @@ designer should have the new widget in his list as in the screen shot here :
 ![alt text][designer]
 
 [designer]: ./doc/designer.png "designer screenshot"
+[logo]: ./assets/icon.svg "PowerSlider logo"
