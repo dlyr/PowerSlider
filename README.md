@@ -3,11 +3,11 @@
 ## Presentation
 Qt Widget, a slider and a double spinbox !
 
-This small piece of code can ease the setup of GUI when you have to control floating pint values.
+This small piece of code can ease the setup of GUI when you have to control floating point values.
 
 A designer plugin is provided to design interface with "PowerSlider" directly in designer.
 
-Manual comming soon.
+Manual comming soon (well, or not, expect if someone ask :D )
 
 ## compile and install
 Pre install compilation results are copied to `Bundle-*` directory depending on compiler and build type.
