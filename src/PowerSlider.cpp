@@ -4,8 +4,8 @@
 #include <cmath>
 #include <qslider.h>
 #include <qspinbox.h>
-#include <values.h>
 
+#include <limits>
 PowerSlider::PowerSlider(QWidget *parent, double alignmentValue)
     : QWidget(parent) {
   // create widget
@@ -63,7 +63,7 @@ void PowerSlider::on_slider_valueChanged(int val) {
                     (spinBox_->maximum() - spinBox_->minimum());
 
   // update if needed
-  if (fabs(dval - spinBox_->value()) >= MINDOUBLE) {
+  if (fabs(dval - spinBox_->value()) >= std::numeric_limits<float>::epsilon() ) {
     spinBox_->setValue(dval);
   }
 }
@@ -122,7 +122,7 @@ void PowerSlider::setSingleStep(double step) {
 }
 
 void PowerSlider::setValue(double dval) {
-  if (fabs(dval - spinBox_->value()) >= MINDOUBLE) {
+  if (fabs(dval - spinBox_->value()) >= std::numeric_limits<float>::epsilon()) {
     spinBox_->setValue(dval);
   }
 }
