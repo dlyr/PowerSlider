@@ -37,7 +37,7 @@ install(DIRECTORY src/ DESTINATION include/PowerSlider
 
 
 if(BUILD_DESIGNER_PLUNGIN)
-    find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml)
+    find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml UiTools)
     set(plugin_SOURCES
         ./src/PowerSlider.cpp 
         ./src/PowerSliderPlugin.cpp
