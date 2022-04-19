@@ -18,10 +18,8 @@ Installation is done under `lib` and `include` directory of `CMAKE_INSTALL_PREFI
 
 So a typical build looks like 
 ```sh
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=somewhere
-make install
+cmake -B build -DCMAKE_INSTALL_PREFIX=somewhere
+cmake --build build --target install
 ```
 Then copy the QtDesigner plugin where appropriate, and run designer
 ```sh
