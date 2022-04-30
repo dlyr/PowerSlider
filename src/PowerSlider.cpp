@@ -6,6 +6,8 @@
 #include <qspinbox.h>
 
 #include <limits>
+#include <iostream>
+
 PowerSlider::PowerSlider(QWidget *parent, double alignmentValue)
     : QWidget(parent) {
   // create widget
@@ -21,7 +23,7 @@ PowerSlider::PowerSlider(QWidget *parent, double alignmentValue)
   spinBox_->setMinimumSize(QSize(spinBox_->sizeHint().width(), 0));
 
   // update slider range
-  slider_->setRange(0, 100000);
+  slider_->setRange(0, 1000000);
 
   // default value
   setRange(0.0, 1.0);
@@ -63,7 +65,9 @@ void PowerSlider::on_slider_valueChanged(int val) {
                     (spinBox_->maximum() - spinBox_->minimum());
 
   // update if needed
-  if (fabs(dval - spinBox_->value()) >= std::numeric_limits<float>::epsilon() ) {
+  double sliderEpsilon = 1./double(spinBox_->decimals());
+
+  if (fabs(dval - spinBox_->value()) >= sliderEpsilon ) {
     spinBox_->setValue(dval);
   }
 }
