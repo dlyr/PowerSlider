@@ -6,7 +6,6 @@
 #include <qspinbox.h>
 
 #include <limits>
-#include <iostream>
 
 PowerSlider::PowerSlider(QWidget *parent, double alignmentValue)
     : QWidget(parent) {
