@@ -43,6 +43,9 @@ class QDESIGNER_WIDGET_EXPORT PowerSlider : public QWidget
   private:
     QSlider* slider_;
     QDoubleSpinBox* spinBox_;
+    // update if needed
+    double sliderEpsilon_;
+
   private slots:
     void on_slider_valueChanged( int );
     void on_spinBox_valueChanged( double );
