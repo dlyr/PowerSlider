@@ -28,6 +28,7 @@ PowerSlider::PowerSlider(QWidget *parent, double alignmentValue)
   setRange(0.0, 1.0);
   setSingleStep(0.1);
 
+
   // connect spinBox_ and slider_
   connect(spinBox_, SIGNAL(valueChanged(double)),
           SLOT(on_spinBox_valueChanged(double)));
@@ -63,10 +64,7 @@ void PowerSlider::on_slider_valueChanged(int val) {
                     double(slider_->maximum() - slider_->minimum()) *
                     (spinBox_->maximum() - spinBox_->minimum());
 
-  // update if needed
-  double sliderEpsilon = 1./double(spinBox_->decimals());
-
-  if (fabs(dval - spinBox_->value()) >= sliderEpsilon ) {
+  if (fabs(dval - spinBox_->value()) >= sliderEpsilon_ ) {
     spinBox_->setValue(dval);
   }
 }
@@ -90,6 +88,7 @@ void PowerSlider::setRange(double min, double max) {
       1;
   spinBox_->setDecimals(decimals);
   spinBox_->setRange(min, max);
+  sliderEpsilon_ = 1. / double( spinBox_->decimals() );
 
   setSingleStep(std::min(spinBox_->singleStep(), (max - min) / 10.0));
 }
@@ -114,6 +113,7 @@ void PowerSlider::setSingleStep(double step) {
 
   int decimals = int(round(std::abs(log(step - floor(step)) / log(10)))) + 1;
   spinBox_->setDecimals(decimals);
+  sliderEpsilon_ = 1. / double( spinBox_->decimals() );
 
   // set spinBox_ step
   spinBox_->setSingleStep(step);
