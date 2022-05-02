@@ -5,8 +5,6 @@
 #include <qslider.h>
 #include <qspinbox.h>
 
-#include <iostream>
-
 #include <limits>
 
 PowerSlider::PowerSlider( QWidget* parent, double alignmentValue ) : QWidget( parent ) {
@@ -101,7 +99,6 @@ void PowerSlider::setSingleStep( double step ) {
     int decimals = int( round( std::abs( log( step - floor( step ) ) / log( 10 ) ) ) ) + 1;
     spinBox_->setDecimals( decimals );
     sliderEpsilon_ = 1. / std::pow( 10., double( spinBox_->decimals() ) );
-    std::cout << sliderEpsilon_ << "\n";
 
     // set spinBox_ step
     spinBox_->setSingleStep( step );
