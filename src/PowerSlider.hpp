@@ -19,22 +19,36 @@ class QDESIGNER_WIDGET_EXPORT PowerSlider : public QWidget
     Q_PROPERTY( double Max READ maximum WRITE setMaximum );
     Q_PROPERTY( double Value READ value WRITE setValue );
     Q_PROPERTY( double SingleStep READ singleStep WRITE setSingleStep );
+    Q_PROPERTY( double Precision READ sliderPrecision WRITE setSliderPrecision );
 
   public:
-    PowerSlider( QWidget* parent = 0, double alignmentValue = 100.0 );
+    PowerSlider( QWidget* parent       = 0,
+                 double alignmentValue = 100.0,
+                 double minimum        = 0.0,
+                 double maximum        = 1.0,
+                 double singleStep     = 0.1,
+                 int precision         = 1000000 );
     ~PowerSlider();
 
     double value();
     double minimum();
     double maximum();
     double singleStep();
+    int sliderPrecision();
+
   public slots:
     void setSingleStep( double );
     void setRange( double, double );
     void setMinimum( double );
     void setMaximum( double );
-
     void setValue( double );
+
+    /// Set slider range, so that one slider is range/precision.
+    /// Should be high enough to have smooth variation, use setSingleStep to control how
+    /// slider/spinbox behave.
+    /// if precision/range is higher than single step, may procduce strange behavior.
+    void setSliderPrecision( int precision );
+
   signals:
     void valueChanged( double );
 

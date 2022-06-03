@@ -7,7 +7,13 @@
 
 #include <limits>
 
-PowerSlider::PowerSlider( QWidget* parent, double alignmentValue ) : QWidget( parent ) {
+PowerSlider::PowerSlider( QWidget* parent,
+                          double alignmentValue,
+                          double minimum,
+                          double maximum,
+                          double step,
+                          int precision ) :
+    QWidget( parent ) {
     // create widget
     slider_  = new QSlider( Qt::Horizontal, this );
     spinBox_ = new QDoubleSpinBox( this );
@@ -21,11 +27,11 @@ PowerSlider::PowerSlider( QWidget* parent, double alignmentValue ) : QWidget( pa
     spinBox_->setMinimumSize( QSize( spinBox_->sizeHint().width(), 0 ) );
 
     // update slider range
-    slider_->setRange( 0, 1000000 );
+    slider_->setRange( 0, precision );
 
     // default value
-    setRange( 0.0, 1.0 );
-    setSingleStep( 0.1 );
+    spinBox_->setRange( minimum, maximum );
+    setSingleStep( step );
 
     // connect spinBox_ and slider_
     connect(
@@ -114,6 +120,12 @@ void PowerSlider::setValue( double dval ) {
     }
 }
 
+void PowerSlider::setSliderPrecision( int precision ) {
+    slider_->setRange( 0, precision );
+    // update tick position on slider
+    on_spinBox_valueChanged( spinBox_->value() );
+}
+
 double PowerSlider::value() {
     return spinBox_->value();
 }
@@ -126,4 +138,7 @@ double PowerSlider::maximum() {
 }
 double PowerSlider::singleStep() {
     return spinBox_->singleStep();
+}
+int PowerSlider::sliderPrecision() {
+    return slider_->maximum();
 }

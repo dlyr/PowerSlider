@@ -22,6 +22,7 @@ int main( int argc, char* argv[] ) {
         PowerSlider* slider = new PowerSlider( &window, alignementValue );
         layout->addWidget( slider );
         slider->setRange( 0., pow( 10., -double( i ) ) );
+        slider->setSliderPrecision( 5 + 10 * i );
     }
 
     layout->addWidget( button );
