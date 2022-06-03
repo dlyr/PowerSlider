@@ -6,7 +6,6 @@ HEADERS     = PowerSlider.h
 CONFIG *= debug_and_release debug_and_release_target
 TARGET  = PowerSlider
 VERSION = 0.3
-QT += xml 
 QMAKE_CLEAN *= *~
 
 

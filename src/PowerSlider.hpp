@@ -1,7 +1,6 @@
 #ifndef __POWERSLIDER_H__
 #define __POWERSLIDER_H__
 
-#include <QDomElement>
 #include <QWidget>
 
 #ifdef POWERSLIDER_DESIGNER_PLUGIN
@@ -24,8 +23,7 @@ class QDESIGNER_WIDGET_EXPORT PowerSlider : public QWidget
   public:
     PowerSlider( QWidget* parent = 0, double alignmentValue = 100.0 );
     ~PowerSlider();
-    QDomElement domElement( const QString& name, QDomDocument& document ) const;
-    void initFromDOMElement( const QDomElement& element );
+
     double value();
     double minimum();
     double maximum();

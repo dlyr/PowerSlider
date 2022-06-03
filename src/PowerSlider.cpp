@@ -114,29 +114,6 @@ void PowerSlider::setValue( double dval ) {
     }
 }
 
-QDomElement PowerSlider::domElement( const QString& name, QDomDocument& document ) const {
-    QDomElement de = document.createElement( name );
-    de.setAttribute( "value", QString::number( spinBox_->value() ) );
-    return de;
-}
-
-void PowerSlider::initFromDOMElement( const QDomElement& e ) {
-    float value = spinBox_->minimum();
-    if ( e.hasAttribute( "value" ) ) {
-        const QString s = e.attribute( "value" );
-        bool ok;
-        s.toFloat( &ok );
-        if ( ok )
-            value = s.toFloat();
-        else { // throw error ??
-        }
-    }
-    else {
-        // throw error ??
-    }
-    setValue( value );
-}
-
 double PowerSlider::value() {
     return spinBox_->value();
 }
