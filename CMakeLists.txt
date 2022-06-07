@@ -46,43 +46,79 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
         )
     message("Set install prefix to ${CMAKE_INSTALL_PREFIX}")
 endif()
-include(GNUInstallDirs)
 
 set(lib_SOURCES
     ./src/PowerSlider.cpp
     )
 
-add_library(PowerSlider SHARED ${lib_SOURCES} )
-target_link_libraries(PowerSlider Qt::Widgets )
+add_library(${PROJECT_NAME} SHARED ${lib_SOURCES} )
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-if(BUILD_DESIGNER_PLUNGIN)
-    target_compile_definitions(PowerSlider PRIVATE "POWERSLIDER_DESIGNER_PLUGIN")
-endif()
+target_link_libraries(${PROJECT_NAME} Qt::Widgets )
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER src/PowerSlider.hpp)
+target_include_directories(
+    ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+)
 
-install(TARGETS PowerSlider DESTINATION lib)
-install(DIRECTORY src/ DESTINATION include/PowerSlider
-    FILES_MATCHING PATTERN "*.hpp")
+if(BUILD_DESIGNER_PLUGIN)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE "POWERSLIDER_DESIGNER_PLUGIN")
 
-
-if(BUILD_DESIGNER_PLUNGIN)
     find_qt_package( COMPONENTS Core Widgets UiTools REQUIRED)
     set(plugin_SOURCES
         ./src/PowerSlider.cpp 
         ./src/PowerSliderPlugin.cpp
         )
     
-    add_library(PowerSliderPlugin SHARED  ${plugin_SOURCES})
-    target_link_libraries(PowerSliderPlugin Qt::UiTools Qt::Widgets )
-    
-    install(TARGETS PowerSliderPlugin DESTINATION plugins/designer)
-endif(BUILD_DESIGNER_PLUNGIN)
+    add_library(${PROJECT_NAME}Plugin SHARED  ${plugin_SOURCES})
+    target_link_libraries(${PROJECT_NAME}Plugin Qt::UiTools Qt::Widgets )
+endif(BUILD_DESIGNER_PLUGIN)
 
+# manage installation
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+# configure the package config file
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake @ONLY
+)
+
+# export targets file in buildtree and install targets file and package config file
+export(TARGETS ${PROJECT_NAME}
+    FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
+    )
+install(EXPORT ${PROJECT_NAME}Targets NAMESPACE ${PROJECT_NAME}::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+    )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+    )
+
+# install target
+install(TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Targets
+    CONFIGURATIONS ${CMAKE_BUILD_TYPE}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+    )
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    if(MSVC OR MSVC_IDE)
+        install(FILES $<TARGET_PDB_FILE:${PROJECT_NAME}> DESTINATION ${CMAKE_INSTALL_BINDIR})
+    endif()
+endif()
+
+if(BUILD_DESIGNER_PLUGIN)
+    install(TARGETS ${PROJECT_NAME}Plugin DESTINATION plugins/designer)
+endif(BUILD_DESIGNER_PLUGIN)
+
+# manage example
 if(BUILD_EXAMPLE_APP)
-    set(example_SOURCES
-        ./example/main.cpp
-        ./src/PowerSlider.cpp)
-    
-    add_executable(example  ${example_SOURCES})
-    target_link_libraries(example Qt::Widgets )
-    target_include_directories(example PUBLIC  ${CMAKE_SOURCE_DIR})
+    # find_package will find PowerSlider package config in the buildtree
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR})
+    add_subdirectory(example)
 endif(BUILD_EXAMPLE_APP)
