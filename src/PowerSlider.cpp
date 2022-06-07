@@ -43,7 +43,7 @@ PowerSlider::PowerSlider( QWidget* parent,
 
     // layout in a hbox
     QHBoxLayout* layout = new QHBoxLayout;
-    layout->setMargin( 0 );
+    layout->setContentsMargins( {} );
     layout->setSpacing( 6 );
     layout->addWidget( slider_ );
     layout->addWidget( spinBox_ );
