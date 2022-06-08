@@ -5,7 +5,6 @@ project(PowerSlider)
 option(BUILD_DESIGNER_PLUGIN "Build Qt Designer Plugin" ON)
 option(BUILD_EXAMPLE_APP "Build example app" ON)
 
-#
 # Qt5 and Qt6 can be retrieved using versionless targets introduced in Qt5.15:
 # https://doc.qt.io/qt-6/cmake-qt5-and-qt6-compatibility.html#versionless-targets
 macro(find_qt_package)
@@ -118,9 +117,10 @@ if(BUILD_DESIGNER_PLUGIN)
     install(TARGETS ${PROJECT_NAME}Plugin DESTINATION plugins/designer)
 endif(BUILD_DESIGNER_PLUGIN)
 
+# find_package will find PowerSlider package config in the buildtree
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR})
+
 # manage example
 if(BUILD_EXAMPLE_APP)
-    # find_package will find PowerSlider package config in the buildtree
-    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR})
     add_subdirectory(example)
 endif(BUILD_EXAMPLE_APP)
