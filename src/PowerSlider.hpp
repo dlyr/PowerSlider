@@ -16,8 +16,6 @@
 #    define QDESIGNER_WIDGET_EXPORT
 #endif
 
-
-
 class QSlider;
 class QDoubleSpinBox;
 

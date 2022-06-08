@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
+cmake_policy(SET CMP0077 NEW)
 
 project(PowerSlider)
 
@@ -119,6 +120,7 @@ endif(BUILD_DESIGNER_PLUGIN)
 
 # find_package will find PowerSlider package config in the buildtree
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR})
+set( CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${CMAKE_CURRENT_BINARY_DIR}" PARENT_SCOPE)
 
 # manage example
 if(BUILD_EXAMPLE_APP)
