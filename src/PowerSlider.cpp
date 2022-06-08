@@ -105,7 +105,7 @@ void PowerSlider::setSingleStep( double step ) {
     int decimals = int( round( std::abs( log( step - floor( step ) ) / log( 10 ) ) ) ) + 1;
     spinBox_->setDecimals( decimals );
     sliderEpsilon_ = 1. / std::pow( 10., double( spinBox_->decimals() ) );
-
+   // sliderEpsilon_ = 0.1;
     // set spinBox_ step
     spinBox_->setSingleStep( step );
 
