@@ -19,7 +19,7 @@
 class QSlider;
 class QDoubleSpinBox;
 
-class QDESIGNER_WIDGET_EXPORT PowerSlider : public QWidget
+class POWERSLIDER_LIB_EXPORT QDESIGNER_WIDGET_EXPORT PowerSlider : public QWidget
 {
     Q_OBJECT;
     Q_PROPERTY( double Min READ minimum WRITE setMinimum );
