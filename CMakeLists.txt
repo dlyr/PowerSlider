@@ -53,6 +53,7 @@ set(lib_SOURCES
 
 add_library(${PROJECT_NAME} SHARED ${lib_SOURCES} )
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+target_compile_definitions(${PROJECT_NAME} PRIVATE MAKE_POWERSLIDER)
 
 target_link_libraries(${PROJECT_NAME} Qt::Widgets )
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER src/PowerSlider.hpp)
@@ -72,6 +73,7 @@ if(BUILD_DESIGNER_PLUGIN)
     
     add_library(${PROJECT_NAME}Plugin SHARED  ${plugin_SOURCES})
     target_link_libraries(${PROJECT_NAME}Plugin Qt::UiTools Qt::Widgets )
+    target_compile_definitions(${PROJECT_NAME}Plugin PRIVATE MAKE_POWERSLIDER)
 endif(BUILD_DESIGNER_PLUGIN)
 
 # manage installation

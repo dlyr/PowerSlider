@@ -1,10 +1,17 @@
 #ifndef POWERSLIDERPLUGIN_H
 #define POWERSLIDERPLUGIN_H
 
+
+#if defined MAKE_POWERSLIDER
+    #define POWERSLIDER_LIB_EXPORT Q_DECL_EXPORT
+#else
+    #define POWERSLIDER_LIB_EXPORT Q_DECL_IMPORT
+#endif
+
+
 #include <QtCore/qplugin.h>
 #include <QtGui/QIcon>
 #include <QtUiPlugin/QDesignerCustomWidgetInterface>
-
 class QDesignerFormEditorInterface;
 
 class PowerSliderPlugin : public QObject,

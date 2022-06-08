@@ -1,6 +1,13 @@
 #ifndef __POWERSLIDER_H__
 #define __POWERSLIDER_H__
 
+
+#if defined MAKE_POWERSLIDER
+    #define POWERSLIDER_LIB_EXPORT Q_DECL_EXPORT
+#else
+    #define POWERSLIDER_LIB_EXPORT Q_DECL_IMPORT
+#endif
+
 #include <QWidget>
 
 #ifdef POWERSLIDER_DESIGNER_PLUGIN
@@ -9,10 +16,12 @@
 #    define QDESIGNER_WIDGET_EXPORT
 #endif
 
+
+
 class QSlider;
 class QDoubleSpinBox;
 
-class QDESIGNER_WIDGET_EXPORT PowerSlider : public QWidget
+class POWERSLIDER_LIB_EXPORT QDESIGNER_WIDGET_EXPORT PowerSlider : public QWidget
 {
     Q_OBJECT;
     Q_PROPERTY( double Min READ minimum WRITE setMinimum );
