@@ -16,7 +16,8 @@ Manual comming soon (well, or not, expect if someone ask :D )
 
 Default installation is `PowerSlider/Bundle-*` directory depending on compiler and build type.
 
-Designer plugin need Qt5 UiTools package (debian pkg `qttools5-dev`), to skip designer plugin build add `-DBUILD_DESIGNER_PLUGIN=Off` to `cmake` call.
+Designer plugin need Qt5 UiTools package (debian pkg `qttools5-dev`),
+to skip designer plugin build add `-DBUILD_DESIGNER_PLUGIN=Off` to `cmake` call.
 
 Installation is done under `lib` and `include` directory of `CMAKE_INSTALL_PREFIX`
 
@@ -44,7 +45,8 @@ designer should have the new widget in his list as in the screen shot here :
 ## use in you project
 
 We use `example` as an example for this case.
-Configure package find in your `CMakeLists.txt` (e.g. `(find_package PowerSlider)`) and give `PowerSlider_DIR` to `cmake` invocation
+Configure package find in your `CMakeLists.txt` (e.g. `(find_package PowerSlider)`)
+and give `PowerSlider_DIR` to `cmake` invocation
 
 ```sh
 cmake example -B build-example -DPowerSlider_DIR=`pwd`/PowerSlider/Bundle-GNU-Release/lib/cmake/PowerSlider
