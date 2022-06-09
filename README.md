@@ -1,5 +1,7 @@
 ![alt text][logo]
+
 # PowerSlider Qt Widget
+
 ## Presentation
 
 Qt Widget, a slider and a double spinbox !
@@ -18,12 +20,15 @@ Designer plugin need Qt5 UiTools package (debian pkg `qttools5-dev`), to skip de
 
 Installation is done under `lib` and `include` directory of `CMAKE_INSTALL_PREFIX`
 
-So a typical build looks like 
+So a typical build looks like
+
 ```sh
 cmake -B build -DCMAKE_INSTALL_PREFIX=somewhere
 cmake --build build --target install
 ```
+
 Then copy the QtDesigner plugin to the appropriate place, and run designer
+
 ```sh
 cp somehere/plugins/designer/libPowerSliderPlugin.so ~/.qt/plugins/designer/
 QT_PLUGIN_PATH=~/.qt/plugins/ designer
@@ -39,9 +44,9 @@ designer should have the new widget in his list as in the screen shot here :
 ## use in you project
 
 We use `example` as an example for this case.
-Configure package find in your `CMakeLists.txt` (e.g. `(find_package PowerSlider)`) and give `PowerSlider_DIR` to `cmake` invocation   
+Configure package find in your `CMakeLists.txt` (e.g. `(find_package PowerSlider)`) and give `PowerSlider_DIR` to `cmake` invocation
 
 ```sh
-cmake example -B build-example -DPowerSlider_DIR=`pwd`/PowerSlider/Bundle-GNU-Release/lib/cmake/PowerSlider 
+cmake example -B build-example -DPowerSlider_DIR=`pwd`/PowerSlider/Bundle-GNU-Release/lib/cmake/PowerSlider
 cmake --build build-example
 ```

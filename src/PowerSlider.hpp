@@ -1,11 +1,10 @@
 #ifndef __POWERSLIDER_H__
 #define __POWERSLIDER_H__
 
-
 #if defined MAKE_POWERSLIDER
-    #define POWERSLIDER_LIB_EXPORT Q_DECL_EXPORT
+#    define POWERSLIDER_LIB_EXPORT Q_DECL_EXPORT
 #else
-    #define POWERSLIDER_LIB_EXPORT Q_DECL_IMPORT
+#    define POWERSLIDER_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
 #include <QWidget>

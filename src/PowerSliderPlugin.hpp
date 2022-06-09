@@ -1,40 +1,38 @@
 #ifndef POWERSLIDERPLUGIN_H
 #define POWERSLIDERPLUGIN_H
 
-
 #if defined MAKE_POWERSLIDER
-    #define POWERSLIDER_LIB_EXPORT Q_DECL_EXPORT
+#    define POWERSLIDER_LIB_EXPORT Q_DECL_EXPORT
 #else
-    #define POWERSLIDER_LIB_EXPORT Q_DECL_IMPORT
+#    define POWERSLIDER_LIB_EXPORT Q_DECL_IMPORT
 #endif
-
 
 #include <QtCore/qplugin.h>
 #include <QtGui/QIcon>
 #include <QtUiPlugin/QDesignerCustomWidgetInterface>
 class QDesignerFormEditorInterface;
 
-class PowerSliderPlugin : public QObject,
-                          public QDesignerCustomWidgetInterface {
-  Q_OBJECT
-  Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDesignerCustomWidgetInterface")
-  Q_INTERFACES(QDesignerCustomWidgetInterface)
-public:
-  PowerSliderPlugin(QObject *parent = nullptr);
+class PowerSliderPlugin : public QObject, public QDesignerCustomWidgetInterface
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA( IID "org.qt-project.Qt.QDesignerCustomWidgetInterface" )
+    Q_INTERFACES( QDesignerCustomWidgetInterface )
+  public:
+    PowerSliderPlugin( QObject* parent = nullptr );
 
-  bool isContainer() const override;
-  bool isInitialized() const override;
-  QIcon icon() const override;
-  QString domXml() const override;
-  QString group() const override;
-  QString includeFile() const override;
-  QString name() const override;
-  QString toolTip() const override;
-  QString whatsThis() const override;
-  QWidget *createWidget(QWidget *parent) override;
-  void initialize(QDesignerFormEditorInterface *core) override;
+    bool isContainer() const override;
+    bool isInitialized() const override;
+    QIcon icon() const override;
+    QString domXml() const override;
+    QString group() const override;
+    QString includeFile() const override;
+    QString name() const override;
+    QString toolTip() const override;
+    QString whatsThis() const override;
+    QWidget* createWidget( QWidget* parent ) override;
+    void initialize( QDesignerFormEditorInterface* core ) override;
 
-private:
-  bool initialized{false};
+  private:
+    bool initialized { false };
 };
 #endif // POWERSLIDERPLUGIN_H
