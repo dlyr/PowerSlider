@@ -6,37 +6,19 @@ project(PowerSlider)
 option(BUILD_DESIGNER_PLUGIN "Build Qt Designer Plugin" ON)
 option(BUILD_EXAMPLE_APP "Build example app" ON)
 
-# Qt5 and Qt6 can be retrieved using versionless targets introduced in Qt5.15:
-# https://doc.qt.io/qt-6/cmake-qt5-and-qt6-compatibility.html#versionless-targets
-macro(find_qt_package)
-    set(options REQUIRED)
-    set(oneValueArgs "")
-    set(multiValueArgs COMPONENTS)
-
-    cmake_parse_arguments(MY_OPTIONS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-
-    if(NOT MY_OPTIONS_COMPONENTS) # User didn't enter any component
-        set(MY_OPTIONS_COMPONENTS "")
-    endif()
-
-    find_package(Qt6 COMPONENTS ${MY_OPTIONS_COMPONENTS} QUIET)
-    if(NOT Qt6_FOUND)
-        if(${MY_OPTIONS_REQUIRED})
-            find_package(Qt5 5.15 COMPONENTS ${MY_OPTIONS_COMPONENTS} REQUIRED)
-        else()
-            find_package(Qt5 5.15 COMPONENTS ${MY_OPTIONS_COMPONENTS})
-        endif()
-    endif()
-endmacro()
-
+include(cmake/findQtPackage.cmake)
 find_qt_package(COMPONENTS Core Widgets REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
 
 set(BUNDLE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Bundle-${CMAKE_CXX_COMPILER_ID}-${CMAKE_BUILD_TYPE}")
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
