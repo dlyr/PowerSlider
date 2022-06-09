@@ -30,7 +30,7 @@ PowerSlider::PowerSlider( QWidget* parent,
     slider_->setRange( 0, precision );
 
     // default value
-    spinBox_->setRange( minimum, maximum );
+    setRange( minimum, maximum );
     setSingleStep( step );
 
     // connect spinBox_ and slider_

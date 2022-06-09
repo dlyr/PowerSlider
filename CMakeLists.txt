@@ -31,76 +31,77 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   message("Set install prefix to ${CMAKE_INSTALL_PREFIX}")
 endif()
 
-set(lib_SOURCES ./src/PowerSlider.cpp)
+add_library(PowerSlider SHARED ./src/PowerSlider.cpp)
 
-add_library(${PROJECT_NAME} SHARED ${lib_SOURCES})
-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-target_compile_definitions(${PROJECT_NAME} PRIVATE MAKE_POWERSLIDER)
+target_compile_definitions(PowerSlider PRIVATE POWERSLIDER_EXPORT)
 
-target_link_libraries(${PROJECT_NAME} Qt::Widgets)
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER
-                                                 src/PowerSlider.hpp)
+target_link_libraries(PowerSlider Qt::Widgets)
+set_target_properties(PowerSlider PROPERTIES PUBLIC_HEADER src/PowerSlider.hpp)
 target_include_directories(
-  ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-                         $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
+  PowerSlider PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+                     $<INSTALL_INTERFACE:include/PowerSlider>)
 
 if(BUILD_DESIGNER_PLUGIN)
-  target_compile_definitions(${PROJECT_NAME}
-                             PRIVATE "POWERSLIDER_DESIGNER_PLUGIN")
+  target_compile_definitions(PowerSlider PRIVATE "POWERSLIDER_DESIGNER_PLUGIN")
 
   find_qt_package(COMPONENTS Core Widgets UiTools REQUIRED)
-  set(plugin_SOURCES ./src/PowerSlider.cpp ./src/PowerSliderPlugin.cpp)
 
-  add_library(${PROJECT_NAME}Plugin SHARED ${plugin_SOURCES})
-  target_link_libraries(${PROJECT_NAME}Plugin Qt::UiTools Qt::Widgets)
-  target_compile_definitions(${PROJECT_NAME}Plugin PRIVATE MAKE_POWERSLIDER)
+  add_library(PowerSliderPlugin SHARED ./src/PowerSlider.cpp
+                                       ./src/PowerSliderPlugin.cpp)
+  target_link_libraries(PowerSliderPlugin Qt::UiTools Qt::Widgets)
+  target_compile_definitions(PowerSliderPlugin PRIVATE POWERSLIDER_EXPORT)
 endif(BUILD_DESIGNER_PLUGIN)
 
 # manage installation
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
+add_library(PowerSlider::PowerSlider ALIAS PowerSlider)
+
 # configure the package config file
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake @ONLY)
+               ${CMAKE_CURRENT_BINARY_DIR}/PowerSliderConfig.cmake @ONLY)
 
 # export targets file in buildtree and install targets file and package config
 # file
-export(TARGETS ${PROJECT_NAME}
-       FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
+export(TARGETS PowerSlider
+       FILE ${CMAKE_CURRENT_BINARY_DIR}/PowerSliderTargets.cmake)
 install(
-  EXPORT ${PROJECT_NAME}Targets
-  NAMESPACE ${PROJECT_NAME}::
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+  EXPORT PowerSliderTargets
+  NAMESPACE PowerSlider::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/PowerSlider)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PowerSliderConfig.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/PowerSlider)
 
 # install target
 install(
-  TARGETS ${PROJECT_NAME}
-  EXPORT ${PROJECT_NAME}Targets
+  TARGETS PowerSlider
+  EXPORT PowerSliderTargets
   CONFIGURATIONS ${CMAKE_BUILD_TYPE}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/PowerSlider)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   if(MSVC OR MSVC_IDE)
-    install(FILES $<TARGET_PDB_FILE:${PROJECT_NAME}>
+    install(FILES $<TARGET_PDB_FILE:PowerSlider>
             DESTINATION ${CMAKE_INSTALL_BINDIR})
   endif()
 endif()
 
 if(BUILD_DESIGNER_PLUGIN)
-  install(TARGETS ${PROJECT_NAME}Plugin DESTINATION plugins/designer)
+  install(TARGETS PowerSliderPlugin DESTINATION plugins/designer)
 endif(BUILD_DESIGNER_PLUGIN)
 
 # find_package will find PowerSlider package config in the buildtree
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR})
-set(CMAKE_PREFIX_PATH
-    "${CMAKE_PREFIX_PATH};${CMAKE_CURRENT_BINARY_DIR}"
-    PARENT_SCOPE)
+
+if(NOT CMAKE_PROJECT_NAME STREQUAL ${PROJECT_NAME})
+  set(CMAKE_PREFIX_PATH
+      "${CMAKE_PREFIX_PATH};${CMAKE_CURRENT_BINARY_DIR}"
+      PARENT_SCOPE)
+endif()
 
 # manage example
 if(BUILD_EXAMPLE_APP)
