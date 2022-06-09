@@ -11,14 +11,12 @@
 
 #ifdef POWERSLIDER_DESIGNER_PLUGIN
 #    include <QtUiPlugin/QDesignerExportWidget>
-#else
-#    define QDESIGNER_WIDGET_EXPORT
 #endif
 
 class QSlider;
 class QDoubleSpinBox;
 
-class POWERSLIDER_API QDESIGNER_WIDGET_EXPORT PowerSlider : public QWidget
+class POWERSLIDER_API PowerSlider : public QWidget
 {
     Q_OBJECT;
     Q_PROPERTY( double Min READ minimum WRITE setMinimum );
