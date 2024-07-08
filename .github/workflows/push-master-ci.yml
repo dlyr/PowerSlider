@@ -29,7 +29,7 @@ jobs:
             icon: "Linux"
             extra-flags: "-DCMAKE_CXX_FLAGS=-Wno-deprecated-declarations"
           - name: "MacOS clang"
-            os: "macos-latest"
+            os: "macos-latest-large"
             cc: "clang"
             cxx: "clang++"
             icon: "Apple"
