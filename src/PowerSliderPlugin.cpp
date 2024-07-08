@@ -323,5 +323,5 @@ QString PowerSliderPlugin::domXml() const {
 }
 
 QString PowerSliderPlugin::includeFile() const {
-    return QLatin1String( "PowerSlider.hpp" );
+    return QLatin1String( "PowerSlider/PowerSlider.hpp" );
 }

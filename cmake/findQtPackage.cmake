@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 
 # Find Qt5 or Qt6 packages Parameters: COMPONENTS <component_list>: optional
 # parameter listing the Qt packages (e.g. Core, Widgets REQUIRED: optional
@@ -23,20 +23,24 @@ macro(find_qt_package)
     set(MY_OPTIONS_COMPONENTS "")
   endif()
 
-  if(NOT QT_DEFAULT_MAJOR_VERSION OR QT_DEFAULT_MAJOR_VERSION STREQUAL "6")
+  if(${MY_OPTIONS_REQUIRED})
+    set(QT_SEARCH_MODE REQUIRED)
+  else()
+    set(QT_SEARCH_MODE QUIET)
+  endif()
+
+  if(QT_DEFAULT_MAJOR_VERSION STREQUAL "6")
+    find_package(Qt6 COMPONENTS ${MY_OPTIONS_COMPONENTS} ${QT_SEARCH_MODE})
+  elseif(QT_DEFAULT_MAJOR_VERSION STREQUAL "5")
+    find_package(Qt5 5.15 COMPONENTS ${MY_OPTIONS_COMPONENTS} ${QT_SEARCH_MODE})
+  else() # QT_DEFAULT_MMAJOR_VERSION not set, first search 6, then 5.
     find_package(
       Qt6
       COMPONENTS ${MY_OPTIONS_COMPONENTS}
       QUIET)
-  endif()
-  if(NOT Qt6_FOUND)
-    if(${MY_OPTIONS_REQUIRED})
-      find_package(
-        Qt5 5.15
-        COMPONENTS ${MY_OPTIONS_COMPONENTS}
-        REQUIRED)
-    else()
-      find_package(Qt5 5.15 COMPONENTS ${MY_OPTIONS_COMPONENTS})
+    if(NOT Qt6_FOUND)
+      find_package(Qt5 5.15 COMPONENTS ${MY_OPTIONS_COMPONENTS}
+                                       ${QT_SEARCH_MODE})
     endif()
   endif()
 endmacro()

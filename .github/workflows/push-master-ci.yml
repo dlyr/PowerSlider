@@ -1,0 +1,75 @@
+name: Master CI
+
+on:
+  push:
+    branches:
+      - master
+
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  main:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: "Windows MSVC"
+            os: "windows-latest"
+            cc: "cl.exe"
+            cxx: "cl.exe"
+            icon: "Windows"
+            extra-flags: ""
+          - name: "Ubuntu gcc"
+            os: "ubuntu-latest"
+            cc: "gcc-10"
+            cxx: "g++-10"
+            icon: "Linux"
+            extra-flags: "-DCMAKE_CXX_FLAGS=-Wno-deprecated-declarations"
+          - name: "MacOS clang"
+            os: "macos-latest"
+            cc: "clang"
+            cxx: "clang++"
+            icon: "Apple"
+            extra-flags: "-DCMAKE_CXX_FLAGS=-Wno-deprecated-declarations"
+        build-type:
+          - "Release"
+        qtversion:
+          - name: "qt5"
+            value: "5.15.1"
+          - name: "qt6"
+            value: "6.2.0"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Ninja
+        shell: bash
+        run: ${{ runner.os == 'macOS' && 'brew install ninja' || runner.os == 'Windows' && 'choco install ninja' || 'sudo apt-get install ninja-build' }}
+      - name: Add msbuild to PATH
+        uses: seanmiddleditch/gha-setup-vsdevenv@master
+        if: runner.os == 'Windows'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          cache: true
+          cache-key-prefix: install-qt-action-${{ matrix.config.name }}-${{ matrix.qtversion.value }}
+          version: ${{ matrix.qtversion.value }}
+      - name: Prepare directories
+        run: |
+          mkdir -p install/
+          mkdir -p master/
+          mkdir -p build/
+      - name: Checkout remote head
+        uses: actions/checkout@master
+        with:
+          path: master
+      - name: Configure
+        run: |
+          cd master
+          cmake -B ../build -DCMAKE_INSTALL_PREFIX=../install -GNinja -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} \
+          -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
+          -DCMAKE_EXECUTE_PROCESS_COMMAND_ECHO=STDOUT
+      - name: Build
+        run: |
+          cmake --build build --target install --config ${{ matrix.build-type }}
