@@ -41,7 +41,7 @@ jobs:
             value: "5.15.1"
           - name: "qt6"
             value: "6.2.0"
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.config.os }}
     steps:
       - name: Install Ninja
         shell: bash
